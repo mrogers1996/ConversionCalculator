@@ -12,7 +12,41 @@ class ConverterViewController: UIViewController {
 
     @IBOutlet weak var outputDisplay: UITextField!
     @IBOutlet weak var inputDisplay: UITextField!
-
+    @IBOutlet weak var numberInputButton: UITextField!
+    @IBOutlet weak var numberOutput: UITextField!
+    
+    var decimalBool = false
+    
+    @IBAction func addNumbers (_ sender: UIButton) {
+        
+        if sender.tag == 11 {
+            if let double = Double(numberInputButton.text!) {
+                numberInputButton.text = String(double * -1)
+                
+                return
+            }
+        }
+        
+        if sender.tag == 10 {
+            numberInputButton.text = ""
+            decimalBool = false
+            return
+        }
+        
+        if sender.tag <= 9 {
+            numberInputButton.text = numberInputButton.text! + String(sender.tag)
+                return
+        }
+        
+        if sender.tag == 12 && self.decimalBool == false {
+                self.numberInputButton.text = numberInputButton.text! + "."
+                self.decimalBool = true
+            return
+        }
+        
+        
+    }
+    
     @IBAction func doConversions(_ sender: Any) {
         let convertAlert = UIAlertController(title: "Convert", message: "Choose Converter", preferredStyle: UIAlertControllerStyle.alert)
 
@@ -65,17 +99,34 @@ class ConverterViewController: UIViewController {
         case "fahrenheit to celsius":
             inputDisplay.text = converter?.inputUnit
             outputDisplay.text = converter?.outputUnit
-            reloadInputViews()
+            
+            if let double = Double(numberInputButton.text!) {
+                numberOutput.text = String((double - 32) / 1.8)
+            }
+            
         case "celcius to fahrenheit":
             inputDisplay.text = converter?.inputUnit
             outputDisplay.text = converter?.outputUnit
+            
+            if let double = Double(numberInputButton.text!) {
+                numberOutput.text = String((double * 1.8 + 32))
+            }
         case "miles to kilometers":
             inputDisplay.text = converter?.inputUnit
             outputDisplay.text = converter?.outputUnit
+            
+            if let double = Double(numberInputButton.text!) {
+                numberOutput.text = String((double * 1.609344))
+            }
+            
         case "kilometers to miles":
             inputDisplay.text = converter?.inputUnit
             outputDisplay.text = converter?.outputUnit
-            reloadInputViews()
+            
+            if let double = Double(numberInputButton.text!) {
+                numberOutput.text = String((double / 1.609344))
+            }
+            
         default:
             inputDisplay.text = "ERROR"
             outputDisplay.text = "ERROR"
